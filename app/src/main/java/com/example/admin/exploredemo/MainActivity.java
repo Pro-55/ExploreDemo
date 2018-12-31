@@ -24,11 +24,21 @@ public class MainActivity extends AppCompatActivity {
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.idRvExploreGrid);
-        int numberOfColumns = 3;
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(numberOfColumns, LinearLayoutManager.VERTICAL);
-        staggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        adapter = new GridViewAdapter(this, data, staggeredGridLayoutManager);
+        int numberOfColumns = 4;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numberOfColumns);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int i) {
+                int mod = i % 6;
+                if (mod == 0 || i == 0) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        recyclerView.setLayoutManager(gridLayoutManager);
+        adapter = new GridViewAdapter(this, data);
         recyclerView.setAdapter(adapter);
 
         Button idBtExploreButton = findViewById(R.id.idBtExploreButton);
