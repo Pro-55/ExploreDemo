@@ -7,42 +7,45 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
-public class GridViewAdapter extends RecyclerView.Adapter<GridViewAdapter.ViewHolder> {
+public class GridViewAdapter extends RecyclerView.Adapter<GridViewAdapter.GridItemViewHolder> {
 
-    private int[] mData;
+    private ArrayList<String> mData;
     private LayoutInflater mInflater;
 
     // data is passed into the constructor
-    GridViewAdapter(Context context, int[] data) {
+    GridViewAdapter(Context context, ArrayList<String> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public GridItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = mInflater.inflate(R.layout.layout_grid_image, viewGroup, false);
-        return new ViewHolder(view);
+        return new GridItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.idIvGridItem.setImageResource(mData[i]);
+    public void onBindViewHolder(@NonNull GridItemViewHolder viewHolder, int i) {
+        viewHolder.idTvItemNumber.setText(mData.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return mData.length;
+        return mData.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        AppCompatImageView idIvGridItem;
+    class GridItemViewHolder extends RecyclerView.ViewHolder {
+        TextView idTvItemNumber;
 
-        ViewHolder(@NonNull View itemView) {
+        GridItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            idIvGridItem = itemView.findViewById(R.id.idIvGridItem);
+            idTvItemNumber = itemView.findViewById(R.id.idTvItemNumber);
         }
     }
 }

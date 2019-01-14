@@ -2,13 +2,18 @@ package com.example.admin.exploredemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.arasthel.spannedgridlayoutmanager.SpanSize;
+import com.arasthel.spannedgridlayoutmanager.SpannedGridLayoutManager;
+
+import java.util.ArrayList;
+
+import kotlin.jvm.functions.Function1;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,24 +25,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // data to populate the RecyclerView with
-        int[] data = {R.drawable.x1, R.drawable.x2, R.drawable.x3, R.drawable.x4, R.drawable.x5, R.drawable.x6, R.drawable.x7, R.drawable.x8, R.drawable.x9, R.drawable.x10, R.drawable.x11, R.drawable.x12, R.drawable.x13, R.drawable.x14, R.drawable.x15, R.drawable.x16, R.drawable.x17, R.drawable.x18};
+        ArrayList<String> data = new ArrayList<>();
+
+        for (int x = 0; x < 1000; x++) {
+            data.add(String.valueOf(x));
+        }
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.idRvExploreGrid);
-        int numberOfColumns = 4;
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numberOfColumns);
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        int numberOfColumns = 3;
+        final SpannedGridLayoutManager spannedGridLayoutManager = new SpannedGridLayoutManager(
+                SpannedGridLayoutManager.Orientation.VERTICAL, numberOfColumns);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numberOfColumns);
+        spannedGridLayoutManager.setItemOrderIsStable(true);
+        spannedGridLayoutManager.setSpanSizeLookup(new SpannedGridLayoutManager.SpanSizeLookup(new Function1<Integer, SpanSize>() {
             @Override
-            public int getSpanSize(int i) {
-                int mod = i % 6;
+            public SpanSize invoke(Integer i) {
+                int mod = i % 4;
                 if (mod == 0 || i == 0) {
-                    return 2;
+                    return new SpanSize(2, 2);
+//                    return new SpanSize(1, 1);
                 } else {
-                    return 1;
+                    return new SpanSize(1, 1);
                 }
+//                return (i + 1) % 4 == 0 ? new SpanSize(2, 2) : new SpanSize(1, 1);
             }
-        });
-        recyclerView.setLayoutManager(gridLayoutManager);
+        }));
+        recyclerView.setLayoutManager(spannedGridLayoutManager);
         adapter = new GridViewAdapter(this, data);
         recyclerView.setAdapter(adapter);
 
